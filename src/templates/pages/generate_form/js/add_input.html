@@ -1,0 +1,183 @@
+<script>
+    // Function to add a new input field with a remove button
+    function addInput() {
+           const container = document.getElementById('input-container');
+
+           // Create a new div for the input group
+           const inputGroup = document.createElement('div');
+           inputGroup.className = 'input-group';
+
+           inputGroup.style.width = '50%'
+
+           // Create the input element
+           const newInput = document.createElement('input');
+           newInput.type = 'color';
+           newInput.name = 'colors[]';
+           newInput.className = 'form-control mt-2';
+           newInput.placeholder = 'Enter value';
+           newInput.value = '#000000';
+           newInput.style.height = '40px'
+           newInput.onchange = function() { displayHex(newInput); };
+
+
+            // Create the span to display the hex value
+           const hexDisplay = document.createElement('span');
+           hexDisplay.className = 'hex-display mx-2';
+           hexDisplay.textContent = newInput.value;
+
+           // Create the remove button
+           const removeButton = document.createElement('button');
+           removeButton.type = 'button';
+           removeButton.className = 'btn btn-danger mt-2';
+           removeButton.innerHTML = '<i class="fas fa-close"></i>';
+           removeButton.onclick = function() { removeInput(removeButton); };
+
+           // Append the input and button to the input group
+           inputGroup.appendChild(newInput);
+           inputGroup.appendChild(removeButton);
+           inputGroup.appendChild(hexDisplay);
+
+           // Append the input group to the container
+           container.appendChild(inputGroup);
+       }
+       
+        // Function to display the hex value of the selected color
+        function displayHex(input) {
+           const firstSpan = input.nextElementSibling; // First sibling span
+           const secondSpan = firstSpan.nextElementSibling; // Second sibling span
+           secondSpan.textContent = input.value; // Update first span with the hex value of the color
+           // if (secondSpan && secondSpan.classList.contains('hex-display-second')) {
+           //     secondSpan.textContent = `Second Span: ${input.value}`; // Update second span
+           // }
+       }
+
+       // Function to remove a specific input field
+       function removeInput(button) {
+           const inputGroup = button.parentElement;
+           inputGroup.remove();
+       }
+
+       // Function to retrieve values from all input fields
+       function getValues() {
+           const inputs = document.querySelectorAll('input[name="colors[]"]');
+           const values = Array.from(inputs).map(input => input.value);
+           console.log(values); // Prints values to the console
+           return values
+           // alert("Values: " + values.join(", "));
+       }
+
+       function getTitleValues() {
+           const inputs = document.querySelectorAll('input[name="title_colors[]"]');
+           const values = Array.from(inputs).map(input => input.value);
+           console.log(values); // Prints values to the console
+           return values
+           // alert("Values: " + values.join(", "));
+       }
+
+
+       function getCaptionValues() {
+           const inputs = document.querySelectorAll('input[name="caption_colors[]"]');
+           const values = Array.from(inputs).map(input => input.value);
+           console.log(values); // Prints values to the console
+           return values
+           // alert("Values: " + values.join(", "));
+       }
+
+       function removeAll() {
+           const container = document.getElementById('input-container');
+           container.innerHTML = ''; // Removes all child elements of the container
+           const container1 = document.getElementById('input-container-title-colors');
+           container1.innerHTML = ''; // Removes all child elements of the container
+           const container2 = document.getElementById('input-container-caption-colors');
+           container2.innerHTML = ''; // Removes all child elements of the container
+       }
+
+
+       //Title Colors
+          // Function to add a new input field with a remove button
+       function addInputTitleColors() {
+           const container = document.getElementById('input-container-title-colors');
+
+           // Create a new div for the input group
+           const inputGroup = document.createElement('div');
+           inputGroup.className = 'input-group';
+
+           inputGroup.style.width = '50%'
+
+           // Create the input element
+           const newInput = document.createElement('input');
+           newInput.type = 'color';
+           newInput.name = 'title_colors[]';
+           newInput.className = 'form-control mt-2';
+           newInput.placeholder = 'Enter value';
+           newInput.value = '#000000';
+           newInput.style.height = '40px'
+           newInput.onchange = function() { displayHex(newInput); };
+
+
+            // Create the span to display the hex value
+           const hexDisplay = document.createElement('span');
+           hexDisplay.className = 'hex-display mx-2';
+           hexDisplay.textContent = newInput.value;
+
+           // Create the remove button
+           const removeButton = document.createElement('button');
+           removeButton.type = 'button';
+           removeButton.className = 'btn btn-danger mt-2';
+           removeButton.innerHTML = '<i class="fas fa-close"></i>';
+           removeButton.onclick = function() { removeInput(removeButton); };
+
+           // Append the input and button to the input group
+           inputGroup.appendChild(newInput);
+           inputGroup.appendChild(removeButton);
+           inputGroup.appendChild(hexDisplay);
+
+           // Append the input group to the container
+           container.appendChild(inputGroup);
+       }
+
+
+
+        //Caption Colors
+          // Function to add a new input field with a remove button
+          function addInputCaptionColors() {
+           const container = document.getElementById('input-container-caption-colors');
+
+           // Create a new div for the input group
+           const inputGroup = document.createElement('div');
+           inputGroup.className = 'input-group';
+
+           inputGroup.style.width = '50%'
+
+           // Create the input element
+           const newInput = document.createElement('input');
+           newInput.type = 'color';
+           newInput.name = 'caption_colors[]';
+           newInput.className = 'form-control mt-2';
+           newInput.placeholder = 'Enter value';
+           newInput.value = '#000000';
+           newInput.style.height = '40px'
+           newInput.onchange = function() { displayHex(newInput); };
+
+
+            // Create the span to display the hex value
+           const hexDisplay = document.createElement('span');
+           hexDisplay.className = 'hex-display mx-2';
+           hexDisplay.textContent = newInput.value;
+
+           // Create the remove button
+           const removeButton = document.createElement('button');
+           removeButton.type = 'button';
+           removeButton.className = 'btn btn-danger mt-2';
+           removeButton.innerHTML = '<i class="fas fa-close"></i>';
+           removeButton.onclick = function() { removeInput(removeButton); };
+
+           // Append the input and button to the input group
+           inputGroup.appendChild(newInput);
+           inputGroup.appendChild(removeButton);
+           inputGroup.appendChild(hexDisplay);
+
+           // Append the input group to the container
+           container.appendChild(inputGroup);
+       }
+</script>

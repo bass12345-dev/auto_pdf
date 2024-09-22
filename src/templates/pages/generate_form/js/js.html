@@ -1,0 +1,268 @@
+<script>
+  $(".single-select-field").select2({
+    theme: "bootstrap-5",
+    width: $(this).data("width")
+      ? $(this).data("width")
+      : $(this).hasClass("w-100")
+      ? "100%"
+      : "style",
+    placeholder: $(this).data("placeholder"),
+    allowClear: true,
+  });
+
+  $(".multiple-select-clear-field").select2({
+    theme: "bootstrap-5",
+    width: $(this).data("width")
+      ? $(this).data("width")
+      : $(this).hasClass("w-100")
+      ? "100%"
+      : "style",
+    placeholder: $(this).data("placeholder"),
+    closeOnSelect: false,
+    allowClear: true,
+  });
+
+
+  function toggleElements() {
+          // Get the elements
+          const selectContainer = document.getElementById('select-container');
+          const inputContainer = document.getElementById('input-container');
+
+          // Toggle visibility
+          if (selectContainer.classList.contains('d-none')) {
+              selectContainer.classList.remove('d-none');
+              inputContainer.classList.add('d-none');
+              $('.toggle_frame_rate').text('Input Frame Rate')
+              $( '.single-select-field' ).select2("val", "");
+              $('select[name=cat1_frame_rate]').val(null).trigger('change');
+              
+          } else {
+              selectContainer.classList.add('d-none');
+              inputContainer.classList.remove('d-none');
+              $('.toggle_frame_rate').text('Select Frame Rate');
+              $('input[name=cat_1_input_frame_rate]').val('');
+            
+          }
+      }
+
+      // function toggle_frame_rate(option){
+      //   const inputContainer = $('.frame-rate-container');
+      //   console.log(inputContainer)
+      //   if(option.value == 'Same as Source Footage'){
+      //     inputContainer.removeClass('d-none')
+      //     inputContainer.find('#input-element').removeClass('d-none');
+      //     // inputContainer.classList.remove('d-none')
+      //   }else {
+      //     inputContainer.addClass('d-none')
+      //   }
+      // }
+
+      
+
+
+    $('#generate_form').on('submit',  function(e){
+    e.preventDefault();
+    let form    =  $(this)
+    let button  = $(this).find('button[type=submit]')
+    let arr = {
+    'cat_standard_information': {
+        'positioning_style'             : $('select[name=cat1_positioning_style]').val(),
+        'standard_additional_information' : get_ids($('select[name=cat1_additional_information]').select2("data"))
+    },
+    'cat_title': {
+        'title_style'        : $('select[name=cat2_title_style]').val(),
+        'title_effects'      : $('select[name=cat2_title_effects]').val(),
+        'title_additional_information' : get_ids($('select[name=cat2_additional_information]').select2("data"))
+    },
+    'cat_captions': {
+        
+        'caption_style'      : $('select[name=cat3_caption_style]').val(),
+        'caption_effects'    : $('select[name=cat3_caption_effects]').val(),
+        
+        'caption_additional_information' : get_ids($('select[name=cat3_additional_information]').select2("data"))
+    },
+    'cat_b_roll': {
+        'b_roll_guidelines'  : $('select[name=cat4_broll_guidelines]').val(),
+        'b_roll_placement'   : $('select[name=cat4_b_roll_placement]').val(),
+        'b_roll_source'      : $('select[name=cat4_b_roll_source]').val(),
+        'b_roll_additional_information' : get_ids($('select[name=cat4_additional_information]').select2("data"))
+    },
+    'cat_transitions': {
+        'transitions'        : get_ids($('select[name=cat5_transitions]').select2("data")),
+        'transitions_additional_information'        : get_ids($('select[name=cat5_additional_information]').select2("data"))
+    },
+    'cat_visuals': {
+        'visuals'            : get_ids($('select[name=cat6_visuals]').select2("data")),
+        'visuals_additional_information'        : get_ids($('select[name=cat6_additional_information]').select2("data"))
+    },
+    'cat_audio': {
+        'audio'              : get_ids($('select[name=cat7_audio]').select2("data")),
+        'audio_additional_information'        : get_ids($('select[name=cat7_additional_information]').select2("data"))
+    },
+    'cat_additional_information': {
+        'additional_information'             : get_ids($('select[name=cat8_additional_information]').select2("data"))
+    },
+    
+    'file_format'            : $('select[name=file_format]').val(),
+    'branding_colors'        : getValues(),
+    'premiere_pro_plugins'   : $('select[name=cat1_premiere_pro_plugins]').val(),
+    'after_effects_plugins'  : $('select[name=cat1_after_effects_plugins]').val(),
+    'reference'              : $('input[name=reference]').val(),
+    'frame_rate'             : $('select[name=cat1_frame_rate]').val(),
+    'name'                   : $('input[name=name]').val(),
+    'extra_information'      : $('textarea[name=extra_information]').val(),
+
+    'title_font'             : $('select[name=cat2_fonts]').val(),
+    'title_color'            : getTitleValues(),
+
+    'caption_font'           : $('select[name=cat3_caption_font]').val(),
+    'caption_color'          : getCaptionValues(),
+
+    }
+
+   
+
+    let index = 0;
+    
+    if (!arr.file_format) {
+        toast_message_error("File Format is empty! Please select a File Format.");
+        button.disabled = false;
+      
+        return;
+        
+    }
+
+    if (!arr.premiere_pro_plugins) {
+        toast_message_error("Premiere Pro Plugins is empty! Please select a Premiere Pro Plugins.");
+        button.disabled = false;
+       
+        return;
+        
+    }
+    if (!arr.name) {
+        toast_message_error("Name box is empty! Please enter a name.")
+        button.disabled = false;
+       
+        return;
+        
+    }
+    $('.prog_cent').attr('hidden', false);
+    let save_btn = $('button.submit-button');
+    var xhr = $.ajax({
+    method : 'POST',
+    url : '/pdf-generator-process',
+    data :  JSON.stringify(arr),
+    contentType: "application/json",
+    dataType : 'json',
+    beforeSend: function () {
+                save_btn.attr('disabled','disabled')
+                save_btn.text('Processing....');
+                changeText();
+                
+    },
+    success :  function(data){
+    
+      if(data){
+        save_btn.prop("disabled", false);
+        save_btn.text('Generate PDF');
+        form[0].reset();
+        $('.progress-bar').css('width', '');
+       
+        $('.message').text('')
+        $( '.single-select-field' ).val(null).trigger('change');
+        $( '.multiple-select-clear-field' ).val(null).trigger('change');
+        clearInterval(intervalId);
+        $('#progress-text').text('');
+        alert(`Pdf has been made at ${data}`);
+        removeAll();
+        window.open(data, "_blank");
+        location.reload()
+      }
+      
+     
+
+      setTimeout(() => {
+          $('.prog_cent').attr('hidden', true);
+        }, 5000);
+    },error :  function(err){
+     
+      clearInterval(intervalId);
+      clearInterval(button.intervalId);
+      save_btn.prop("disabled", false);
+      save_btn.text('Generate PDF');
+      setTimeout(() => {
+          $('.prog_cent').attr('hidden', true);
+        }, 5000);
+      alert('Server Error' + err.status)
+      location.reload();
+    }
+    })
+
+
+    const intervalId = setInterval(changeText, 8000);
+
+    //  Clear any existing intervals to avoid overlap
+      if (button.intervalId) {
+          clearInterval(button.intervalId);
+      }
+     // Poll for progress updates every second
+      button.intervalId = setInterval(function () {
+                    $.get('/pdf-progress', function (data) {
+                        var percentComplete = data.progress;
+                        $('.progress-bar').css('width', percentComplete + '%');
+                        $('#progress-text').text(percentComplete + '%');
+                        $('.message').text(data.message)
+                        // Stop polling when progress reaches 100%
+                        if (percentComplete == 100) {
+                            clearInterval(button.intervalId);
+                            update_progress();
+                        }
+                    });
+                },15000); // Check progress every second
+
+    })
+
+  function update_progress(){
+      fetch('/update-pdf-progress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'pdf_prog' : 1,'pdf_message': 'Processing'}),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+       
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        
+    });
+  }
+  
+   // Array of texts to cycle through
+   const texts = ["Processing...", "Please Wait...", "Creating PDF Guidelines..", "Info : The more you choose Guidelines, the longer it will take to generate.","Please Don't reload this page"]
+   let index = 0;
+
+      // Function to change text
+      function changeText() {
+          const textContainer = document.getElementById('progress-text1');
+          textContainer.innerHTML = '<p class="text-danger">' + texts[index] + '</p>';
+          index = (index + 1) % texts.length; // Loop back to the start
+      }
+
+      // Change text every 30 seconds (30000 milliseconds)
+     
+
+      // Optionally, change text immediately on page load
+      
+
+  function get_ids(ids) {
+    arr = [];
+    $.each(ids, function (index, value) {
+      arr.push(ids[index]["id"]);
+    });
+    return arr;
+  }
+</script>

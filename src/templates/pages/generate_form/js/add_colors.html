@@ -1,0 +1,153 @@
+<script>
+  var _width = "50%";
+  var _height = "40px";
+  var _placeholder = "Enter Hex Color Code";
+  var _type = "text";
+  // Create the remove button
+  const hashtag = document.createElement("button");
+  hashtag.type = "button";
+  hashtag.className = "btn btn-secondary mt-2";
+  hashtag.innerHTML = "#";
+
+
+  
+  function addInput() {
+    let _button = $("button.add-new-branding-colors");
+    const _container = document.getElementById("input-container");
+    const _name = "colors[]";
+    _CreateElement(_button, _container, _name);
+  }
+
+   //Title Colors
+  function addInputTitleColors() {
+    let _button         = $("button.add-new-title-colors");
+    const _container    = document.getElementById("input-container-title-colors");
+    const _name         = "title_colors[]";
+    _CreateElement(_button, _container, _name);
+  }
+  //Caption Colors
+   function addInputCaptionColors() {
+    let _button         = $("button.add-new-caption-colors");
+    const _container    = document.getElementById("input-container-caption-colors");
+    const _name         = "caption_colors[]";
+    _CreateElement(_button, _container, _name);
+  }
+
+
+
+  function _CreateElement(_button,_container,_name) {
+    _button.attr("disabled", true);
+    // Create a new div for the input group
+    const inputGroup = document.createElement("div");
+    inputGroup.className = "input-group";
+    inputGroup.style.width = _width;
+    // Create the input element
+    const newInput = document.createElement("input");
+    newInput.type = "text";
+    newInput.name = _name;
+    newInput.className = "form-control mt-2 numbers";
+    newInput.placeholder = _placeholder;
+    newInput.value = "";
+    newInput.style.height = _height;
+    newInput.onchange = function () {
+      displayColor(newInput,_button);
+    };
+
+    // Create the span to display the hex value
+    const hexDisplay = document.createElement("span");
+    hexDisplay.className = "hex-display mx-2";
+    hexDisplay.textContent = newInput.value;
+
+    // Create the remove button
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "btn btn-danger mt-2";
+    removeButton.innerHTML = '<i class="fas fa-close"></i>';
+    removeButton.onclick = function () {
+      removeInput(removeButton);
+    };
+
+    // Append the input and button to the input group
+    inputGroup.appendChild(hashtag);
+    inputGroup.appendChild(newInput);
+    inputGroup.appendChild(removeButton);
+    inputGroup.appendChild(hexDisplay);
+
+    // Append the input group to the container
+    _container.appendChild(inputGroup);
+  }
+
+  // Function to remove a specific input field
+  function removeInput(button) {
+    const inputGroup = button.parentElement;
+    inputGroup.remove();
+    $("button.add-new-branding-colors").attr("disabled", false);
+  }
+
+  // Function to retrieve values from all input fields
+  function getValues() {
+    const inputs = document.querySelectorAll('input[name="colors[]"]');
+    const values = Array.from(inputs).map((input) => input.value);
+    console.log(values); // Prints values to the console
+    return values;
+    // alert("Values: " + values.join(", "));
+  }
+
+  function getTitleValues() {
+    const inputs = document.querySelectorAll('input[name="title_colors[]"]');
+    const values = Array.from(inputs).map((input) => input.value);
+    console.log(values); // Prints values to the console
+    return values;
+    // alert("Values: " + values.join(", "));
+  }
+
+  function getCaptionValues() {
+    const inputs = document.querySelectorAll('input[name="caption_colors[]"]');
+    const values = Array.from(inputs).map((input) => input.value);
+    console.log(values); // Prints values to the console
+    return values;
+    // alert("Values: " + values.join(", "));
+  }
+
+  function removeAll() {
+    const container = document.getElementById("input-container");
+    container.innerHTML = ""; // Removes all child elements of the container
+    const container1 = document.getElementById("input-container-title-colors");
+    container1.innerHTML = ""; // Removes all child elements of the container
+    const container2 = document.getElementById(
+      "input-container-caption-colors"
+    );
+    container2.innerHTML = ""; // Removes all child elements of the container
+  }
+
+  // Function to display the hex value of the selected color
+  function displayColor(input,_button) {
+    var input_value = "#" + input.value;
+    validate_hex = isValidHexColor(input_value);
+    console.log(validate_hex);
+    if (validate_hex === true) {
+      _button.attr("disabled", false);
+    } else {
+      _button.attr("disabled", true);
+      toast_message_error("Please Enter Proper Hex Color Code || Remove #");
+    }
+    const firstSpan = input.nextElementSibling; // First sibling span
+    const secondSpan = firstSpan.nextElementSibling; // Second sibling span
+    secondSpan.innerHTML =
+      '<div class="mt-2"  style="background-color:' +
+      input_value +
+      '; height: 40px; width: 100px;"></div>'; // Update first span with the hex value of the color
+  }
+
+  function isValidHexColor(color) {
+    // Regular expression to match valid hex color codes
+    const hexColorPattern =
+      /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{4}|[A-Fa-f0-9]{8})$/;
+
+    return hexColorPattern.test(color);
+  }
+
+  
+
+
+</script>

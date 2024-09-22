@@ -1,0 +1,655 @@
+<form id="generate_form" class="row g-4 mt-2">
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5 class="mx-3">*Category 1 : <strong>Standard Information</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">File Format</label>
+          <select
+            class="form-select single-select-field"
+            name="file_format"
+            data-placeholder="Select File Format"
+          >
+            <option></option>
+            {% for item in file_formats %}
+            <option value="{{item | safe}}">{{item | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Premiere Pro Plugins</label>
+          <select
+            class="form-select single-select-field"
+            name="cat1_premiere_pro_plugins"
+            data-placeholder="Select Premiere Pro Plugins"
+          >
+            <option></option>
+            {% for item in res['premier_plugins'] %}
+         
+            <option value="{{item[0] | safe}}" {% if item[2] == '' %}disabled{% endif %}>{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">After Effects Plugins</label>
+          <select
+            class="form-select single-select-field"
+            name="cat1_after_effects_plugins"
+            data-placeholder="Select After Effects Plugins"
+          >
+            <option></option>
+            {% for item in res['effects_plugins'] %}
+            <option value="{{item[0] | safe}}" {% if item[2] == '' %}disabled{% endif %} >{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Branding Colors</label>
+          <!-- <select class="form-select multiple-select-clear-field" name="branding_colors"  data-placeholder="Select Branding Colors" multiple>
+                  {% for item in branding_colors %}
+                  <option value="{{item | safe}}">{{item | safe}}</option>
+                  {% endfor %}
+               </select> -->
+
+          <div id="input-container">
+            <div class="input-group" style="width: 50%">
+              <!-- <input type="color" class="form-control " style="height: 40px;" name="colors[]" onchange="displayHex(this)" placeholder="Enter value" />
+                     <button type="button" class="btn btn-danger" onclick="removeInput(this)"><i class="fa fa-close"></i></button>
+                     <span class="hex-display mx-2">#000000</span> -->
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary mt-2 add-new-branding-colors"
+            onclick="addInput()"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Reference</label>
+          <input class="form-control" placeholder="Insert Link Here" name="reference" />
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label">Frame Rate</label>
+            <!-- <a href="javascript:;" onclick="toggleElements()" class="pull-right float-right toggle_frame_rate">→Input Frame Rate</a> -->
+          </div>
+          <div id="select-container">
+            <select
+              class="form-select single-select-field"
+              name="cat1_frame_rate"
+              data-placeholder="Select Frame Rate"
+            >
+              <option></option>
+              {% for item in frame_rate %}
+              <option value="{{item | safe}}">{{item | safe}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- <div class="col-md-12 frame-rate-container d-none">
+                    <div class="mx-4">
+                       <label  class="form-label">Input Frame Rate</label>
+                       <input type="text" class="form-control d-none" id="input-element" name="cat_1_input_frame_rate" placeholder="Type Frame Rate">
+                    </div>
+                 </div> -->
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Positioning Style</label>
+          <select
+            class="form-select single-select-field"
+            name="cat1_positioning_style"
+            data-placeholder="Select Positioning Style"
+          >
+            <option></option>
+            {% for item in res['positioning_style'] %}
+            <option value="{{item[0] | safe}}"  {% if item[2] == None %}disabled{% endif %}> {{ item[1] if item[2] != None else item[1] + ' No Notion Link' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label">Standard Information Additional Information</label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat1_additional_information"
+            data-placeholder="Select Standard Information Additional Information"
+            multiple
+          >
+            <option></option>
+            {% for key in res['custom'] %}
+            <optgroup label="{{key}}">
+              {% for value in res['custom'][key] %}
+              <option value="{{value[0]}}">{{value[1]}}</option>
+              {% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5 class="mx-3">*Category 2 : <strong>Title</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Title Font</label>
+          <select
+            class="form-select single-select-field"
+            name="cat2_fonts"
+            data-placeholder="Select Title Font"
+          >
+            <option></option>
+            {% for item in res['fonts'] %}
+            <option value="{{item[0] | safe}}"  {% if item[2] == None %}disabled{% endif %}> {{ item[1] if item[2] != None else item[1] + ' No Notion Link' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Title Style</label>
+          <select
+            class="form-select single-select-field"
+            name="cat2_title_style"
+            data-placeholder="Select Title Style"
+          >
+            <option></option>
+            {% for item in res['title_style'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Title Effects</label>
+          <select
+            class="form-select single-select-field"
+            name="cat2_title_effects"
+            data-placeholder="Select Title Effects"
+          >
+            <option></option>
+            {% for item in res['title_effects'] %}
+            <option value="{{item[0] | safe}}" {% if item[2] == '' %}disabled{% endif %} >{{ item[1] if item[2] != '' else item[1] + ' No Notion Link' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Title Color</label>
+          <div id="input-container-title-colors">
+            <div class="input-group" style="width: 50%">
+              <!-- <input type="color" class="form-control " style="height: 40px;" name="title_colors[]" onchange="displayHex(this)" placeholder="Enter value" />
+                     <button type="button" class="btn btn-danger" onclick="removeInput(this)"><i class="fa fa-close"></i></button>
+                     <span class="hex-display mx-2">#000000</span> -->
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary mt-2 add-new-title-colors"
+            onclick="addInputTitleColors()"
+          >
+            Add
+          </button>
+          <!-- <select class="form-select single-select-field" name="cat2_title_color" data-placeholder="Select Title Color">
+                  <option></option>
+               </select> -->
+        </div>
+      </div>
+
+     
+        <div class="col-md-12">
+          <div class="mx-4">
+            <div class="d-flex flex-row justify-content-between">
+              <label class="form-label">Title Additional Information</label>
+              <span class="text-danger">*Multiple Select</span>
+            </div>
+            <select
+              class="form-select multiple-select-clear-field"
+              name="cat2_additional_information"
+              data-placeholder="Select Title Additional Information"
+              multiple
+            >
+              <option></option>
+              {% for key in res['custom'] %}
+              <optgroup label="{{key}}">
+                {% for value in res['custom'][key] %}
+                <option value="{{value[0]}}">{{value[1]}}</option>
+                {% endfor %}
+              </optgroup>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+     
+    </div>
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5 class="mx-3">*Category 3 : <strong>Captions</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Caption Font</label>
+          <select
+            class="form-select single-select-field"
+            name="cat3_caption_font"
+            data-placeholder="Select Caption Font"
+          >
+            <option></option>
+            {% for item in res['fonts'] %}
+            <option value="{{item[0] | safe}}"  {% if item[2] == None %}disabled{% endif %}> {{ item[1] if item[2] != None else item[1] + ' No Notion Link' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Caption Style</label>
+          <select
+            class="form-select single-select-field"
+            name="cat3_caption_style"
+            data-placeholder="Select Caption Style"
+          >
+            <option></option>
+            {% for item in res['caption_style'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Caption Effects</label>
+          <select
+            class="form-select single-select-field"
+            name="cat3_caption_effects"
+            data-placeholder="Select Caption Effects"
+          >
+            <option></option>
+            {% for item in res['caption_effects'] %}
+            <option value="{{item[0] | safe}}"  {% if item[2] == None %}disabled{% endif %}> {{ item[1] if item[2] != None else item[1] + ' No Notion Link' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Caption Color</label>
+          <div id="input-container-caption-colors">
+            <div class="input-group" style="width: 50%">
+              <!-- <input type="color" class="form-control " style="height: 40px;" name="caption_colors[]" onchange="displayHex(this)" placeholder="Enter value" />
+                    <button type="button" class="btn btn-danger" onclick="removeInput(this)"><i class="fa fa-close"></i></button>
+                    <span class="hex-display mx-2">#000000</span> -->
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary mt-2 add-new-caption-colors"
+            onclick="addInputCaptionColors()"
+          >
+            Add
+          </button>
+          <!-- <select class="form-select single-select-field" name="cat2_title_color" data-placeholder="Select Title Color">
+                 <option></option>
+              </select> -->
+        </div>
+      </div>
+     
+        <div class="col-md-12">
+          <div class="mx-4">
+            <div class="d-flex flex-row justify-content-between">
+              <label class="form-label">Caption Additional Information</label>
+              <span class="text-danger">*Multiple Select</span>
+            </div>
+            <select
+              class="form-select multiple-select-clear-field"
+              name="cat3_additional_information"
+              data-placeholder="Select Caption Additional Information"
+              multiple
+            >
+              <option></option>
+              {% for key in res['custom'] %}
+              <optgroup label="{{key}}">
+                {% for value in res['custom'][key] %}
+                <option value="{{value[0]}}">{{value[1]}}</option>
+                {% endfor %}
+              </optgroup>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5>*Category 4 : <strong>B-Roll</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">B-Roll Guidelines</label>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat4_broll_guidelines"
+            data-placeholder="Select B-Roll Guidelines"
+          >
+            <option></option>
+            {% for item in res['b_roll_guide'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">B-Roll Placement Guidelines</label>
+          <select
+            class="form-select single-select-field"
+            name="cat4_b_roll_placement"
+            data-placeholder="Select B-Roll Placement Guidelines"
+          >
+            <option></option>
+            {% for item in res['b_roll_guide'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label">B-Roll Source</label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat4_b_roll_source"
+            data-placeholder="Select B-Roll Source"
+            multiple
+          >
+            <option></option>
+            {% for item in res['b_roll_sourcing'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+     
+        <div class="col-md-12">
+          <div class="mx-4">
+            <div class="d-flex flex-row justify-content-between">
+              <label class="form-label">B-Roll Additional Information</label>
+              <span class="text-danger">*Multiple Select</span>
+            </div>
+            <select
+              class="form-select multiple-select-clear-field"
+              name="cat4_additional_information"
+              data-placeholder="Select B-Roll Additional Information"
+              multiple
+            >
+              <option></option>
+              {% for key in res['custom'] %}
+              <optgroup label="{{key}}">
+                {% for value in res['custom'][key] %}
+                <option value="{{value[0]}}">{{value[1]}}</option>
+                {% endfor %}
+              </optgroup>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5>*Category 5 : <strong>Transitions</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label"></label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat5_transitions"
+            data-placeholder="Select Your Transitions"
+            multiple
+          >
+            <option></option>
+            {% for item in res['transitions'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label">Transitions Additional Information</label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat5_additional_information"
+            data-placeholder="Select Transitions Additional Information"
+            multiple
+          >
+            <option></option>
+            {% for key in res['custom'] %}
+            <optgroup label="{{key}}">
+              {% for value in res['custom'][key] %}
+              <option value="{{value[0]}}">{{value[1]}}</option>
+              {% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5>*Category 6 : <strong>Visuals</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label"></label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat6_visuals"
+            data-placeholder="Select Your Visuals"
+            multiple
+          >
+            <option></option>
+            {% for item in res['visuals'] %}
+            <option value="{{item[0] | safe}}">{{ item[1] if item[2] != None else item[1] + ' - No Notion Link' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+   
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label">Visual Additional Information</label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat6_additional_information"
+            data-placeholder="Select Visual Additional Information"
+            multiple
+          >
+            <option></option>
+            {% for key in res['custom'] %}
+            <optgroup label="{{key}}">
+              {% for value in res['custom'][key] %}
+              <option value="{{value[0]}}">{{value[1]}}</option>
+              {% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5>*Category 7 : <strong>Audio</strong></h5>
+    </div>
+    
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label"></label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat7_audio"
+            data-placeholder="Select Your Audio Guidelines"
+            multiple
+          >
+            <option></option>
+            {% for item in res['audio'] %}
+            <option value="{{item[0] | safe}}">{{item[1] | safe}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <div class="d-flex flex-row justify-content-between">
+            <label class="form-label">Audio Additional Information</label>
+            <span class="text-danger">*Multiple Select</span>
+          </div>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat7_additional_information"
+            data-placeholder="Select Audio Additional Information"
+            multiple
+          >
+            <option></option>
+            {% for key in res['custom'] %}
+            <optgroup label="{{key}}">
+              {% for value in res['custom'][key] %}
+              <option value="{{value[0]}}">{{value[1]}}</option>
+              {% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="col-12">
+    <div class="border border-amora1 rounded-pill p-2">
+      <h5>*Category 8 : <strong>Additional Information</strong></h5>
+    </div>
+    <div class="row g-3 mt-2">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label"> </label>
+          <select
+            class="form-select multiple-select-clear-field"
+            name="cat8_additional_information"
+            data-placeholder="Select Additional Information"
+            multiple
+          >
+            <option></option>
+            {% for key in res['custom'] %}
+            <optgroup label="{{key}}">
+              {% for value in res['custom'][key] %}
+              <option value="{{value[0]}}">{{value[1]}}</option>
+              {% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+  <div class="col-12">
+    <div class="row g-3">
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Insert Name Here</label>
+          <input class="form-control" placeholder="Name" name="name" />
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mx-4">
+          <label class="form-label">Extra Information</label>
+          <textarea
+            class="form-control"
+            name="extra_information"
+            rows="6"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="prog_cent" hidden>
+    <div class="progress">
+      <div class="progress-bar"></div>
+    </div>
+
+    <p class="message"></p>
+  </div>
+  <p id="progress-text"></p>
+  <p id="progress-text1"></p>
+  <!-- <button type="submit" class="btn bg-amora2 text-white rounded-pill submit-button disabled">Generate PDF</button> -->
+  <button
+    type="submit"
+    class="btn bg-primary rounded-pill text-white submit-button"
+  >
+    Generate PDF
+  </button>
+</form>

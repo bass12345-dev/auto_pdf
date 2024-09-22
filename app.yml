@@ -1,0 +1,27 @@
+# runtime: python38
+# entrypoint: gunicorn -b :$PORT app:app
+
+# handlers:
+# - url: /.*
+#   script: auto
+
+
+runtime: python  # Make sure the runtime is updated to the latest supported version
+env: flex
+entrypoint: gunicorn -b :$PORT --timeout 200 app:app
+instance_class: F4  # Choose a higher-performance class
+
+runtime_config:
+    operating_system: "ubuntu22"
+    runtime_version: "3.12"
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2
+
+handlers:
+  - url: /.*
+    script: auto
+
+
+
